@@ -21,11 +21,12 @@ struct ItemModel {
 
   // MARK: Lifecycle
 
-  init(sizeMode: MagazineLayoutItemSizeMode, height: CGFloat) {
+  init(sizeMode: MagazineLayoutItemSizeMode, height: CGFloat, zIndex: Int?) {
     id = NSUUID().uuidString
     self.sizeMode = sizeMode
     originInSection = .zero
     size = CGSize(width: 0, height: height)
+    self.zIndex = zIndex
   }
 
   // MARK: Internal
@@ -36,5 +37,6 @@ struct ItemModel {
   var originInSection: CGPoint
   var size: CGSize
   var preferredHeight: CGFloat?
-
+  var zIndex: Int?
+  
 }

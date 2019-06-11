@@ -35,6 +35,8 @@ extension MagazineLayout {
     public static let SectionInsets: UIEdgeInsets = .zero
     public static let ItemInsets: UIEdgeInsets = .zero
 
+    public static let HeaderZIndexByAddingToNumberOfItems: Int = 1
+    public static let FooterZIndexByAddingToNumberOfItems: Int = 1
   }
 
 }

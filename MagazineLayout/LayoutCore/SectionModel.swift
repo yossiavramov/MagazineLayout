@@ -165,14 +165,15 @@ struct SectionModel {
     updateIndexOfFirstInvalidatedRowIfNecessary(toProposedIndex: 0)
   }
 
-  mutating func updateItemSizeMode(to sizeMode: MagazineLayoutItemSizeMode, atIndex index: Int) {
+  mutating func updateItemSizeMode(to sizeMode: MagazineLayoutItemSizeMode, zIndex: Int?, atIndex index: Int) {
     // Accessing this array using an unsafe, untyped (raw) pointer avoids expensive copy-on-writes
     // and Swift retain / release calls.
     let itemModelsPointer = UnsafeMutableRawPointer(mutating: &itemModels)
     let directlyMutableItemModels = itemModelsPointer.assumingMemoryBound(to: ItemModel.self)
 
     directlyMutableItemModels[index].sizeMode = sizeMode
-
+    directlyMutableItemModels[index].zIndex = zIndex
+    
     if case let .static(staticHeight) = sizeMode.heightMode {
       directlyMutableItemModels[index].size.height = staticHeight
     }

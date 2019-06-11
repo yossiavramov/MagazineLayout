@@ -31,6 +31,20 @@ public protocol UICollectionViewDelegateMagazineLayout: UICollectionViewDelegate
     sizeModeForItemAt indexPath: IndexPath)
     -> MagazineLayoutItemSizeMode
 
+  ///   Asks the delegate for the zIndex of the specified item.
+  ///
+  ///   - Parameters:
+  ///      - collectionView: The collection view using the layout.
+  ///      - collectionViewLayout: The layout requesting the information.
+  ///      - indexPath: The index path of the item.
+  ///
+  ///   - Returns: The zIndex of the specified item. Returns 0 for default zIndex
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    zIndexForItemAt indexPath: IndexPath)
+    -> Int?
+  
   ///   Asks the delegate for the visibility mode of the header in the specified section.
   ///
   ///   - Parameters:
@@ -135,4 +149,14 @@ public protocol UICollectionViewDelegateMagazineLayout: UICollectionViewDelegate
     insetsForItemsInSectionAtIndex index: Int)
     -> UIEdgeInsets
 
+}
+
+public extension UICollectionViewDelegateMagazineLayout {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    zIndexForItemAt indexPath: IndexPath)
+    -> Int? {
+      return nil
+  }
 }

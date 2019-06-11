@@ -130,7 +130,7 @@ public final class MagazineLayout: UICollectionViewLayout {
         let numberOfItems = modelState.numberOfItems(inSectionAtIndex: sectionIndex, .afterUpdates)
         for itemIndex in 0..<numberOfItems {
           let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
-          modelState.updateItemSizeMode(to: sizeModeForItem(at: indexPath), forItemAt: indexPath)
+          modelState.updateItemSizeMode(to: sizeModeForItem(at: indexPath), zIndex: zIndexForItem(at: indexPath), forItemAt: indexPath)
         }
       }
     }
@@ -163,7 +163,7 @@ public final class MagazineLayout: UICollectionViewLayout {
         }
 
         newHeaderLayoutAttributes[headerLocation]?.shouldVerticallySelfSize = heightMode == .dynamic
-        newHeaderLayoutAttributes[headerLocation]?.zIndex = numberOfItems + 1
+        newHeaderLayoutAttributes[headerLocation]?.zIndex = numberOfItems + Default.HeaderZIndexByAddingToNumberOfItems
       }
 
       // Create footer layout attributes if necessary
@@ -179,7 +179,7 @@ public final class MagazineLayout: UICollectionViewLayout {
         }
 
         newFooterLayoutAttributes[footerLocation]?.shouldVerticallySelfSize = heightMode == .dynamic
-        newFooterLayoutAttributes[footerLocation]?.zIndex = numberOfItems + 1
+        newFooterLayoutAttributes[footerLocation]?.zIndex = numberOfItems + Default.FooterZIndexByAddingToNumberOfItems
       }
 
       // Create background layout attributes if necessary
@@ -216,7 +216,12 @@ public final class MagazineLayout: UICollectionViewLayout {
           newItemLayoutAttributes[itemLocation]?.shouldVerticallySelfSize = true
         }
 
-        newItemLayoutAttributes[itemLocation]?.zIndex = numberOfItems - itemIndex
+        
+        if let zIndex = zIndexForItem(at: itemLocation.indexPath) {
+          newItemLayoutAttributes[itemLocation]?.zIndex = zIndex
+        } else {
+          newItemLayoutAttributes[itemLocation]?.zIndex = numberOfItems - itemIndex
+        }
       }
     }
 
@@ -778,6 +783,17 @@ public final class MagazineLayout: UICollectionViewLayout {
       sizeModeForItemAt: indexPath)
   }
 
+  private func zIndexForItem(at indexPath: IndexPath) -> Int? {
+    guard let delegateMagazineLayout = delegateMagazineLayout else {
+      return nil
+    }
+    
+    return delegateMagazineLayout.collectionView(
+      currentCollectionView,
+      layout: self,
+      zIndexForItemAt: indexPath)
+  }
+  
   private func initialItemHeight(from itemSizeMode: MagazineLayoutItemSizeMode) -> CGFloat {
     switch itemSizeMode.heightMode {
     case let .static(staticHeight):
@@ -868,9 +884,11 @@ public final class MagazineLayout: UICollectionViewLayout {
 
   private func itemModelForItem(at indexPath: IndexPath) -> ItemModel {
     let itemSizeMode = sizeModeForItem(at: indexPath)
+    let zIndex = zIndexForItem(at: indexPath)
     return ItemModel(
       sizeMode: itemSizeMode,
-      height: initialItemHeight(from: itemSizeMode))
+      height: initialItemHeight(from: itemSizeMode),
+      zIndex: zIndex)
   }
 
   private func headerModelForHeader(

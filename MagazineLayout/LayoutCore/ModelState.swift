@@ -547,9 +547,10 @@ final class ModelState {
     invalidateSectionMaxYsCacheForSectionIndices(startingAt: sectionIndex)
   }
 
-  func updateItemSizeMode(to sizeMode: MagazineLayoutItemSizeMode, forItemAt indexPath: IndexPath) {
+  func updateItemSizeMode(to sizeMode: MagazineLayoutItemSizeMode, zIndex: Int?, forItemAt indexPath: IndexPath) {
     currentSectionModels[indexPath.section].updateItemSizeMode(
       to: sizeMode,
+      zIndex: zIndex,
       atIndex: indexPath.item)
 
     invalidateSectionMaxYsCacheForSectionIndices(startingAt: indexPath.section)
